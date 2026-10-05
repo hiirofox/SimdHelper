@@ -132,6 +132,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\SimdType.h" />
+    <ClInclude Include="..\test\GranularPitchShifter.h" />
+    <ClInclude Include="..\test\NLModeling.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\main.cpp" />

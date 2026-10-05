@@ -18,6 +18,12 @@
     <ClInclude Include="..\SimdType.h">
       <Filter>源文件</Filter>
     </ClInclude>
+    <ClInclude Include="..\test\GranularPitchShifter.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\test\NLModeling.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\main.cpp">

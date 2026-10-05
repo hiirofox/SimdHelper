@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cmath>
 #include <array>
 
 #define SimdInsteadUnroll 0
@@ -51,7 +52,12 @@ namespace SimdHelper
 		constexpr simd_t(const std::array<Sample, Size>& init_data) : dat(init_data) {}
 		template <typename... Ts> requires (sizeof...(Ts) == Size)
 			constexpr simd_t(Ts... xs) : dat{ static_cast<Sample>(xs)... } {}
-		constexpr explicit simd_t(Sample x) { dat.fill(x); }
+		template <typename T> requires std::is_convertible_v<T, Sample> constexpr simd_t(T x) { dat.fill(static_cast<Sample>(x)); }
+
+		constexpr void fill(Sample x)
+		{
+			dat.fill(x);
+		}
 
 		Sample Sum() const
 		{
@@ -137,6 +143,32 @@ namespace SimdHelper
 			for (size_t i = 0; i < Size; ++i) res.dat[i] = -dat[i];
 			return res;
 		}
+
+		constexpr simd_t& ShiftLeft()
+		{
+			for (size_t i = 0; i + 1 < Size; ++i) dat[i] = dat[i + 1];
+			return *this;
+		}
+		constexpr simd_t& ShiftRight()
+		{
+			for (size_t i = Size - 1; i > 0; --i) dat[i] = dat[i - 1];
+			return *this;
+		}
+		constexpr simd_t& RotateLeft()
+		{
+			auto t = dat[0];
+			ShiftLeft();
+			dat[Size - 1] = t;
+			return *this;
+		}
+		constexpr simd_t& RotateRight()
+		{
+			auto t = dat[Size - 1];
+			ShiftRight();
+			dat[0] = t;
+			return *this;
+		}
+
 	};
 	template <typename Sample, size_t Size>
 	simd_t<Sample, Size>  sin(simd_t<Sample, Size>  x) { return x.BatchFunc([](auto x) {return std::sin(x); }); }
